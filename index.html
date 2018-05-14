@@ -1,0 +1,47 @@
+<html>
+	<head>
+		
+		<script src="https://unpkg.com/@reactivex/rxjs@5.0.0/dist/global/Rx.js"></script>
+		
+		<style>
+			#circle{
+				height: 30px;
+				width: 30px;
+				border: 1px solid black;
+				border-radius: 50%;
+				background-color: yellow;
+				position: absolute;
+			}
+			
+			#circle:hover{
+				cursor: pointer;
+			}
+			
+			#data{
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="circle" draggable="true"></div>
+		<div id="data"></div>
+				
+		<script>
+			let circle = document.getElementById("circle");			
+			let data = document.getElementById("data");			
+			data.innerHTML = 'Top position: ' + circle.clientTop + ', Left position: ' + circle.clientLeft;							
+		
+			let drag = Rx.Observable.fromEvent(circle, 'drag');
+			let drop = Rx.Observable.fromEvent(circle, 'dragend');
+			
+			let events = Rx.Observable.merge(drag, drop);
+			
+			events.subscribe(event => {
+				circle.style.left = event.x;
+				circle.style.top = event.y;	
+				data.innerHTML = 'Top position: ' + event.y + ', Left position: ' + event.x;				
+			});
+		</script>
+		
+	</body>
+</html>
